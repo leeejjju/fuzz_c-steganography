@@ -7,16 +7,19 @@ void decode_message(int, FILE *);
 
 //int main(int argc, char **argv) {
 extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size){
- 
 
-  FILE *fp;
+  	FILE *fp;
+
+	//make mutated...? files...
+	char filename[256];
+    sprintf(filename, "tmp/tmp_%d.ppm", getpid());
+    fp = fopen(filename, "wb");
+    if (!fp) return 0;
+    fwrite(Data, Size, 1, fp);
+    fclose(fp);
 
   //Print an error if no args provided
-#ifdef FILENAME_M
-  if((fp = fopen((char*)Data, "rb")) == NULL) {
-#else
-  if((fp = fopen("img/hackny.ppm", "rb")) == NULL) {
-#endif
+  if((fp = fopen(filename, "rb")) == NULL) {
     printf("\nError: Please provide a file to scan.\n\n");
     return 1;
   }
