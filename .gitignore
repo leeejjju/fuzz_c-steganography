@@ -3,3 +3,6 @@ readMsg
 writeMsg
 *.o
 *.txt
+*.out
+fuzz/inputs/
+fizz/tmp/
