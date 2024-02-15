@@ -5,7 +5,7 @@ INPUT_DIR = inputs
 
 all: clean readMsg.out writeMsg.out
 
-tr: readMsh.out
+tr: readMsg.out
 
 tw: writeMsg.out
 
@@ -16,9 +16,9 @@ writeMsg.out: stego.c fuzz_writeMsg.c
 	$(CC) $(CFLAG) -o $@ $^
 
 rw:
-	./writeMsg INPUT_DIR
+	./writeMsg.out $(INPUT_DIR)
 rr:
-	./readMsg INPUT_DIR
+	./readMsg.out $(INPUT_DIR)
 
 clean:
 	rm -f *.out
