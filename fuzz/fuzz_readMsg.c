@@ -1,13 +1,21 @@
 #include <stdio.h>
 #include "stego.h"
-#include "readMsg.h"
 
+int get_msg_length(FILE *);
+void decode_message(int, FILE *);
 
 int main(int argc, char **argv) {
+//int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size){
+ 
+
   FILE *fp;
 
   //Print an error if no args provided
-  if((fp = fopen(argv[1], "rb")) == NULL) {
+#ifdef FILENAME_M
+  if((fp = fopen((char*)Data, "rb")) == NULL) {
+#else
+  if((fp = fopen("img/hackny.ppm", "rb")) == NULL) {
+#endif
     printf("\nError: Please provide a file to scan.\n\n");
     return 1;
   }
@@ -51,3 +59,32 @@ int get_msg_length(FILE *fp) {
     return length;
 }
 
+void decode_message(int length, FILE *fp) {
+  int readTo = length * 8, numRead = 0, i;
+  unsigned char charBuffer = 0;
+  char temp;
+  char secret_message[length + 1];
+  int idx = 0;
+  
+  while(numRead <= readTo) {
+    temp = fgetc(fp); 
+    if(numRead % 8 == 0) {
+      secret_message[idx] = charBuffer;
+      idx++;
+      charBuffer = 0;
+    } else {
+      charBuffer <<= 1;
+    }
+    charBuffer |= (temp & 1);
+    numRead++;
+  }//end while
+  
+  //Start printing from character 1 because the first char is junk
+  for(i = 1; i < idx; i++) {
+    printf("%c", secret_message[i]);
+  }
+
+  printf("\n\n");
+
+  return;
+}
