@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "../stego.h"
+#include <stdint.h>
 
 void copy_header(FILE *, int, FILE *);
 int get_message_length(char[]);
@@ -7,7 +8,7 @@ int message_fits(int, int, int);
 int count_new_lines(FILE *);
 void encode_length(FILE *, FILE *, int);
 void encode_message(FILE *, FILE *, int, char *, int, int);
-#define IMAGE
+// #define IMAGE
 int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
 {
   
@@ -20,12 +21,15 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     return 1;
   }
   fwrite(data, 1, size, fp);
+  fflush(fp);
   fclose(fp);
   if ((fp = fopen(imagepath, "r+")) == NULL)
   {
     printf("Could not open file to read %s.\nAborting\n", imagepath);
     return 1;
   } 
+  char *myMessage = "test message";
+  int message_length = get_message_length(myMessage);
   #else // mutate message data
   
   if ((fp = fopen("img/hackny.ppm", "r+")) == NULL)
@@ -33,6 +37,8 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
     printf("Could not open file %s.\nAborting\n", argv[2]);
     return 1;
   }
+  char *myMessage = (char *)data;
+  int message_length = (int)size;
   #endif
 
 
@@ -40,8 +46,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
   {
     skip_comments(fp);
 
-    char *myMessage = "test message";
-    int message_length = get_message_length(myMessage);
+
     int w = get_width(fp);
     int h = get_height(fp);
 
