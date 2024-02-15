@@ -1,11 +1,12 @@
 #include <stdio.h>
 #include "stego.h"
+#include <stdint.h>
 
 int get_msg_length(FILE *);
 void decode_message(int, FILE *);
 
-int main(int argc, char **argv) {
-//int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size){
+//int main(int argc, char **argv) {
+extern int LLVMFuzzerTestOneInput(const uint8_t *Data, size_t Size){
  
 
   FILE *fp;
