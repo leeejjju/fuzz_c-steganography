@@ -34,7 +34,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
   
   if ((fp = fopen("img/hackny.ppm", "r+")) == NULL)
   {
-    printf("Could not open file %s.\nAborting\n", argv[2]);
+    printf("Could not open file %s.\nAborting\n", "img/hackny.ppm");
     return 1;
   }
   char *myMessage = (char *)data;
