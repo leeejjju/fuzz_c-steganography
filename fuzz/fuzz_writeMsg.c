@@ -40,7 +40,7 @@ int LLVMFuzzerTestOneInput(const uint8_t *data, size_t size)
   {
     skip_comments(fp);
 
-    char *myMessage = (char *)argv[1];
+    char *myMessage = "test message";
     int message_length = get_message_length(myMessage);
     int w = get_width(fp);
     int h = get_height(fp);
