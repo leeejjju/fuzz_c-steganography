@@ -1,11 +1,24 @@
 CC = clang
-all: clean readMsg writeMsg
+CFLAG = -fsanitize=fuzzer,address,undefined -g
+INPUT_DIR = inputs
+.PHONY : all rw rr clean
 
-readMsg: stego.c fuzz_readMsg.c 
-	$(CC) -o $@ $^
+all: clean readMsg.out writeMsg.out
 
-writeMsg: stego.c fuzz_writeMsg.c
-	$(CC) -o $@ $^
+tr: readMsh.out
+
+tw: writeMsg.out
+
+readMsg.out: stego.c fuzz_readMsg.c 
+	$(CC) $(CFLAG) -o $@ $^
+
+writeMsg.out: stego.c fuzz_writeMsg.c
+	$(CC) $(CFLAG) -o $@ $^
+
+rw:
+	./writeMsg INPUT_DIR
+rr:
+	./readMsg INPUT_DIR
 
 clean:
-	rm -f readMsg writeMsg out.ppm
+	rm -f *.out
